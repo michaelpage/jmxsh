@@ -23,8 +23,8 @@
 package jmxsh;
 
 /**
-   A tuplet that identifies a server/mbean/attribute/operation.
-*/
+ * A tuplet that identifies a server/mbean/attribute/operation.
+ */
 
 class Context {
     String server;
@@ -33,19 +33,19 @@ class Context {
     String attrop;
 
     Context() {
-	this.server = null;
-	this.domain = null;
-	this.mbean = null;
-	this.attrop = null;
+        this.server = null;
+        this.domain = null;
+        this.mbean = null;
+        this.attrop = null;
     }
 
     static private Context tclContext = new Context();
 
     static Context fromTcl() {
-	tclContext.server = JInterp.getGlobal("SERVER", null);
-	tclContext.domain = JInterp.getGlobal("DOMAIN", null);
-	tclContext.mbean = JInterp.getGlobal("MBEAN", null);
-	tclContext.attrop = JInterp.getGlobal("ATTROP", null);
-	return tclContext;
+        tclContext.server = JInterp.getGlobal("SERVER", null);
+        tclContext.domain = JInterp.getGlobal("DOMAIN", null);
+        tclContext.mbean = JInterp.getGlobal("MBEAN", null);
+        tclContext.attrop = JInterp.getGlobal("ATTROP", null);
+        return tclContext;
     }
 }

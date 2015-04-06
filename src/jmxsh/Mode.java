@@ -25,16 +25,19 @@ package jmxsh;
 abstract class Mode {
 
     abstract String getPrePromptDisplay();
+
     abstract String getPrompt();
+
     abstract String handleInput(String input);
-    abstract void   displayHelp();
+
+    abstract void displayHelp();
 
     static Mode getBrowseModeInstance() {
-	return BrowseMode.instance;
+        return BrowseMode.instance;
     }
 
     static Mode getShellModeInstance() {
-	return ShellMode.instance;
+        return ShellMode.instance;
     }
 
 }

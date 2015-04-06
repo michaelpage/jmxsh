@@ -30,25 +30,22 @@ import java.io.IOException;
  * A simple JMX server to use for testing.
  *
  * @author Dad
-  */
+ */
 public class SampleJmxServer {
 
-     public static void main(String[] args) {
-	 System.out.println("Starting up server...");
+    public static void main(String[] args) {
+        System.out.println("Starting up server...");
 
-	 MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+        MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
 
-	 
-	 
-	 System.out.println("Press enter to quit.");
-	 try {
-	     int c = System.in.read();
-	 }
-	 catch (IOException e) {
-	     System.err.println("Error reading input.");
-	 }
+        System.out.println("Press enter to quit.");
+        try {
+            int c = System.in.read();
+        } catch (IOException e) {
+            System.err.println("Error reading input.");
+        }
 
-	 System.out.println("Shutting down server...");
+        System.out.println("Shutting down server...");
     }
 
 }

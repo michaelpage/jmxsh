@@ -22,7 +22,7 @@
     <mkdir dir="${test}"/>
     <mkdir dir="${doc}"/>
     <mkdir dir="${blib}"/>
-    <mkdir dir="${bbinlib}"/>
+    <mkdir dir="${binlib}"/>
   </target>   
 
   <target name="clean">

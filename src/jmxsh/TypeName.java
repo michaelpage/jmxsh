@@ -25,12 +25,11 @@ package jmxsh;
 import org.apache.log4j.*;
 
 /**
-   The name of a class.
-
-   Automatically handles parsing and printing of nice class names,
-   including the kludgy representation of array names.
-*/
-
+ * The name of a class.
+ * <p/>
+ * Automatically handles parsing and printing of nice class names,
+ * including the kludgy representation of array names.
+ */
 
 
 class TypeName {
@@ -41,148 +40,148 @@ class TypeName {
     private String className;
 
     static public String translateClassName(String className) {
-	return TypeName.parseClassName(className).toString();
+        return TypeName.parseClassName(className).toString();
     }
 
     static public String translateNiceName(String niceName) {
-	String result = TypeName.fromNiceName(niceName).toClassName();
-	logger.debug("Input nicename: " + niceName + ", output class name: " + result);
-	return result;
+        String result = TypeName.fromNiceName(niceName).toClassName();
+        logger.debug("Input nicename: " + niceName + ", output class name: " + result);
+        return result;
     }
 
-    /** Parse the java internal class name. */
+    /**
+     * Parse the java internal class name.
+     */
     static public TypeName parseClassName(String typeString) {
-	TypeName tn = new TypeName();
+        TypeName tn = new TypeName();
 
-	if (typeString.charAt(0) != '[') {
-	    tn.className = typeString;
-	    return tn;
-	}
+        if (typeString.charAt(0) != '[') {
+            tn.className = typeString;
+            return tn;
+        }
 
-	int pos = 0;
-	while (typeString.charAt(pos) == '[') {
-	    tn.depth++;
-	    pos++;
-	}
-	
-	switch (typeString.charAt(pos)) {
-	case 'L': {
-	    int name_begin = pos + 1;
-	    int name_end = typeString.indexOf(';', name_begin);
+        int pos = 0;
+        while (typeString.charAt(pos) == '[') {
+            tn.depth++;
+            pos++;
+        }
 
-	    tn.className = typeString.substring(name_begin, name_end);
-	    break;
-	}
-	case 'Z':
-	    tn.className = "boolean";
-	    break;
-	case 'B':
-	    tn.className = "byte";
-	    break;
-	case 'C':
-	    tn.className = "char";
-	    break;
-	case 'D':
-	    tn.className = "double";
-	    break;
-	case 'F':
-	    tn.className = "float";
-	    break;
-	case 'I':
-	    tn.className = "int";
-	    break;
-	case 'J':
-	    tn.className = "long";
-	    break;
-	case 'S':
-	    tn.className = "short";
-	    break;
-	}
+        switch (typeString.charAt(pos)) {
+            case 'L': {
+                int name_begin = pos + 1;
+                int name_end = typeString.indexOf(';', name_begin);
 
-	return tn;
+                tn.className = typeString.substring(name_begin, name_end);
+                break;
+            }
+            case 'Z':
+                tn.className = "boolean";
+                break;
+            case 'B':
+                tn.className = "byte";
+                break;
+            case 'C':
+                tn.className = "char";
+                break;
+            case 'D':
+                tn.className = "double";
+                break;
+            case 'F':
+                tn.className = "float";
+                break;
+            case 'I':
+                tn.className = "int";
+                break;
+            case 'J':
+                tn.className = "long";
+                break;
+            case 'S':
+                tn.className = "short";
+                break;
+        }
+
+        return tn;
     }
 
-    /** Return the TypeName from an actual class. */
+    /**
+     * Return the TypeName from an actual class.
+     */
     static public TypeName fromClass(Class<?> klass) {
-	return parseClassName(klass.getName());
+        return parseClassName(klass.getName());
     }
 
-    /** Return the TypeName from an actual class. */
+    /**
+     * Return the TypeName from an actual class.
+     */
     static public TypeName fromNiceName(String niceName) {
-	TypeName tn = new TypeName();
-	tn.depth = 0;
-	for (int pos = niceName.indexOf('['); pos != -1; pos = niceName.indexOf('[', pos+1)) {
-	    tn.depth++;
-	}
-	if (tn.depth > 0) {
-	    tn.className = niceName.substring(0, niceName.indexOf('['));
-	} 
-	else {
-	    tn.className = niceName;
-	}
-	return tn;
+        TypeName tn = new TypeName();
+        tn.depth = 0;
+        for (int pos = niceName.indexOf('['); pos != -1; pos = niceName.indexOf('[', pos + 1)) {
+            tn.depth++;
+        }
+        if (tn.depth > 0) {
+            tn.className = niceName.substring(0, niceName.indexOf('['));
+        } else {
+            tn.className = niceName;
+        }
+        return tn;
     }
 
-    /** Print a nice string.  Remove java.lang. */
+    /**
+     * Print a nice string.  Remove java.lang.
+     */
     public String toString() {
-	StringBuilder sb = new StringBuilder(50);
-	if (className.startsWith("java.lang.")) {
-	    sb.append(className.substring(10));
-	}
-	else {
-	    sb.append(className);
-	}
-	for (int i=0; i<depth; i++) {
-	    sb.append("[]");
-	}
-	return sb.toString();
+        StringBuilder sb = new StringBuilder(50);
+        if (className.startsWith("java.lang.")) {
+            sb.append(className.substring(10));
+        } else {
+            sb.append(className);
+        }
+        for (int i = 0; i < depth; i++) {
+            sb.append("[]");
+        }
+        return sb.toString();
     }
 
-    /** Return the internal Java class name. */
+    /**
+     * Return the internal Java class name.
+     */
     public String toClassName() {
-	if (depth == 0) {
-	    return className;
-	}
+        if (depth == 0) {
+            return className;
+        }
 
-	StringBuilder sb = new StringBuilder();
-	for (int i=0; i<depth; i++) {
-	    sb.append('[');
-	}
-	if (className.equals("boolean")) {
-	    sb.append('Z');
-	}
-	else if (className.equals("byte")) {
-	    sb.append('B');
-	}
-	else if (className.equals("char")) {
-	    sb.append('C');
-	}
-	else if (className.equals("double")) {
-	    sb.append('D');
-	}
-	else if (className.equals("float")) {
-	    sb.append('F');
-	}
-	else if (className.equals("int")) {
-	    sb.append('I');
-	}
-	else if (className.equals("long")) {
-	    sb.append('J');
-	}
-	else if (className.equals("short")) {
-	    sb.append('S');
-	}
-	else {
-	    sb.append('L');
-	    sb.append(className);
-	    sb.append(';');
-	}
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < depth; i++) {
+            sb.append('[');
+        }
+        if (className.equals("boolean")) {
+            sb.append('Z');
+        } else if (className.equals("byte")) {
+            sb.append('B');
+        } else if (className.equals("char")) {
+            sb.append('C');
+        } else if (className.equals("double")) {
+            sb.append('D');
+        } else if (className.equals("float")) {
+            sb.append('F');
+        } else if (className.equals("int")) {
+            sb.append('I');
+        } else if (className.equals("long")) {
+            sb.append('J');
+        } else if (className.equals("short")) {
+            sb.append('S');
+        } else {
+            sb.append('L');
+            sb.append(className);
+            sb.append(';');
+        }
 
-	return sb.toString();
+        return sb.toString();
     }
 
     private TypeName() {
-	className = "";
-	depth = 0;
+        className = "";
+        depth = 0;
     }
 }

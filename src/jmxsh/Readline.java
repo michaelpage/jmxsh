@@ -22,69 +22,69 @@
  */
 package jmxsh;
 
-import org.apache.log4j.*;
-import java.io.*;
-import jline.*;
+import jline.ConsoleReader;
+import org.apache.log4j.Logger;
+
+import java.io.File;
+import java.io.IOException;
 
 /**
-   Facade for jline classes.
-*/
+ * Facade for jline classes.
+ */
 
 class Readline {
 
     private static Logger logger = Logger.getLogger(Readline.class);
     private static final Readline instance = new Readline();
 
-    public static Readline getInstance() { return instance; }
+    public static Readline getInstance() {
+        return instance;
+    }
 
     private ConsoleReader reader;
 
     private Readline() {
 
-	try {
-	    reader = new ConsoleReader();
-	}
-	catch (IOException e) {
-	    logger.fatal("Could not create jline reader.", e);
-	    throw new IllegalStateException("Error creating jline reader.", e);
-	}
+        try {
+            reader = new ConsoleReader();
+        } catch (IOException e) {
+            logger.fatal("Could not create jline reader.", e);
+            throw new IllegalStateException("Error creating jline reader.", e);
+        }
 
-	reader.setUseHistory(false);
+        reader.setUseHistory(false);
     }
 
     void setHistoryFile(String filename) {
-	File history = new File(filename);
+        File history = new File(filename);
 
-	try {
-	    reader.getHistory().setHistoryFile(history);
-	}
-	catch(IOException e) {
-	    throw new IllegalArgumentException("History file '" + filename + "' does not exist is not writable.", e);
-	}
+        try {
+            reader.getHistory().setHistoryFile(history);
+        } catch (IOException e) {
+            throw new IllegalArgumentException("History file '" + filename + "' does not exist is not writable.", e);
+        }
     }
 
     public void addToHistory(String command) {
-	reader.getHistory().addToHistory(command);
+        reader.getHistory().addToHistory(command);
     }
 
     public String readline(String prompt) {
-	try {
-	    return reader.readLine(prompt);
-	}
-	catch (IOException e) {
-	    logger.error("Readline error.", e);
-	    throw new IllegalArgumentException("Readline error: " + e.getMessage(), e);
-	}
+        try {
+            return reader.readLine(prompt);
+        } catch (IOException e) {
+            logger.error("Readline error.", e);
+            throw new IllegalArgumentException("Readline error: " + e.getMessage(), e);
+        }
     }
 
     public String readline(String prompt, char mask) {
-	try {
-	    return reader.readLine(prompt, mask);
-	}
-	catch (IOException e) {
-	    logger.error("Readline error.", e);
-	    throw new IllegalArgumentException("Readline error: " + e.getMessage(), e);
-	}
+        try {
+            return reader.readLine(prompt, mask);
+        } catch (IOException e) {
+            logger.error("Readline error.", e);
+            throw new IllegalArgumentException("Readline error: " + e.getMessage(), e);
+        }
     }
 
 }
